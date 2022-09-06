@@ -5,7 +5,6 @@ const cors = require("cors");
 const morgan = require("morgan");
 const connection = require("./database");
 
-const { NotFound, ErrorHandler } = require("./middlewares/error");
 const chatRouter = require("./routers/chat.router");
 const userRouter = require("./routers/user.router");
 
@@ -20,9 +19,6 @@ app.use(morgan("tiny"));
 
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRouter);
-
-app.use(NotFound);
-app.use(ErrorHandler);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () =>
