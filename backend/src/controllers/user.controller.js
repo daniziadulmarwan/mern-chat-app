@@ -11,22 +11,22 @@ module.exports = {
       const salt = bcrypt.genSaltSync();
       const hashedPassword = bcrypt.hashSync(password, salt);
 
-      await User.create({
+      const user = await User.create({
         name,
         email,
         password: hashedPassword,
         image,
       });
 
-      // const data = {
-      //   id: user._id,
-      //   name: user.name,
-      // };
+      const data = {
+        id: user._id,
+        name: user.name,
+      };
 
-      // const KEY = process.env.KEY;
-      // const token = await jwt.sign(data, KEY, { expiresIn: "1d" });
+      const KEY = process.env.KEY;
+      const token = await jwt.sign(data, KEY, { expiresIn: "1d" });
 
-      return res.status(201).json("Registered");
+      return res.status(201).json({ token });
     } catch (error) {
       return res.status(400).json(error.message);
     }
