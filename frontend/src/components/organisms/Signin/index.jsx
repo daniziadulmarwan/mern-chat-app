@@ -21,7 +21,9 @@ export default function Signin() {
   const URL = "http://localhost:5000/api/user/signin";
   const [show, setShow] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [alerts, setAlerts] = useState([]);
+
+  const [emailError, setEmailError] = useState([]);
+  const [passError, setPassError] = useState([]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -44,25 +46,20 @@ export default function Signin() {
     } catch (error) {
       setLoading(false);
       let arr = error.response.data;
-      let dat = [];
+      let email = [];
+      let pass = [];
+
       arr.map((a) => {
-        if (a.param === "email") dat.push(a.msg);
+        if (a.param === "email") email.push(a.msg);
+        if (a.param === "password") pass.push(a.msg);
       });
-      setAlerts(dat);
+      setEmailError(email);
+      setPassError(pass);
     }
   };
 
-  console.log(alerts);
-
   return (
     <VStack>
-      {/* {alerts.length && (
-        <Alert status="error">
-          <AlertIcon />
-          {alerts[0]}
-        </Alert>
-      )} */}
-
       <FormControl id="email" isRequired style={{ marginTop: "25px" }}>
         <FormLabel>Email</FormLabel>
         <Input
@@ -71,8 +68,8 @@ export default function Signin() {
           onChange={(e) => setEmail(e.target.value)}
           type={"email"}
         />
-        {alerts.length != 0 && (
-          <FormHelperText color={"red"}>{alerts[0]}</FormHelperText>
+        {emailError.length != 0 && (
+          <FormHelperText color={"red"}>{emailError[0]}</FormHelperText>
         )}
       </FormControl>
 
@@ -85,6 +82,7 @@ export default function Signin() {
             onChange={(e) => setPassword(e.target.value)}
             type={show ? "text" : "password"}
           />
+
           <InputRightElement>
             <Button
               borderTopLeftRadius={"none"}
@@ -95,6 +93,9 @@ export default function Signin() {
             </Button>
           </InputRightElement>
         </InputGroup>
+        {passError.length != 0 && (
+          <FormHelperText color={"red"}>{passError[0]}</FormHelperText>
+        )}
       </FormControl>
 
       <Button

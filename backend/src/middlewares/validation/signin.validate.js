@@ -5,6 +5,8 @@ const signin = [
   body("email")
     .notEmpty()
     .withMessage("Email cannot be empty")
+    .isEmail()
+    .withMessage("Email must be an email")
     .custom(async (value) => {
       const user = await User.findOne({ email: value });
       if (!user) return Promise.reject("User not found");

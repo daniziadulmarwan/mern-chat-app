@@ -49,4 +49,22 @@ module.exports = {
       return res.status(400).json(error.message);
     }
   },
+
+  fetchAll: async (req, res) => {
+    const keyword = req.query.search
+      ? {
+          $or: [
+            { name: { $regex: req.query.search, $options: "-i" } },
+            { email: { $regex: req.query.search, $options: "-i" } },
+          ],
+        }
+      : {};
+
+    console.log(req.user._id.toString());
+
+    const users = await User.find(keyword).find({
+      _id: { $ne: req.user._id.toString() },
+    });
+    return res.status(200).json({ users });
+  },
 };
