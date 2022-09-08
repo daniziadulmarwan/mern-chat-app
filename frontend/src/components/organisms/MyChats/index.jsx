@@ -5,6 +5,7 @@ import jwtDecode from "jwt-decode";
 import React, { useEffect, useState } from "react";
 import { ChatState } from "../../../context/ChatProvider";
 import ChatLoading from "../ChatLoading";
+import GroupChatModal from "../GroupChatModal";
 
 export default function MyChats() {
   const URL = "http://localhost:5000/api";
@@ -63,13 +64,15 @@ export default function MyChats() {
         alignItems={"center"}
       >
         Chats
-        <Button
-          d={"flex"}
-          fontSize={{ base: "14px", md: "10px", lg: "14px" }}
-          rightIcon={<AddIcon />}
-        >
-          New Group Chat
-        </Button>
+        <GroupChatModal>
+          <Button
+            d={"flex"}
+            fontSize={{ base: "14px", md: "10px", lg: "14px" }}
+            rightIcon={<AddIcon />}
+          >
+            New Group Chat
+          </Button>
+        </GroupChatModal>
       </Box>
 
       <Box
