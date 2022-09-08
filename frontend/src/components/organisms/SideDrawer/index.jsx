@@ -6,11 +6,16 @@ import {
   Menu,
   MenuButton,
   Avatar,
+  MenuList,
+  MenuItem,
+  MenuDivider,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { BellIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../../context/ChatProvider";
+import jwtDecode from "jwt-decode";
+import ProfileModal from "../ProfileModal";
 
 export default function SideDrawer() {
   const [search, setSearch] = useState("");
@@ -19,7 +24,7 @@ export default function SideDrawer() {
   const [loadingChat, setLoadingChat] = useState();
 
   const { user } = ChatState();
-  console.log(user);
+  const login = jwtDecode(user);
 
   return (
     <>
@@ -56,10 +61,17 @@ export default function SideDrawer() {
               <Avatar
                 size="sm"
                 cursor="pointer"
-                name={user.name}
-                src={user.image}
+                name={login.name}
+                src={login.image}
               />
             </MenuButton>
+            <MenuList>
+              <ProfileModal user={login}>
+                <MenuItem>My Profile</MenuItem>
+              </ProfileModal>
+              <MenuDivider />
+              <MenuItem>Sign Out</MenuItem>
+            </MenuList>
           </Menu>
         </div>
       </Box>
