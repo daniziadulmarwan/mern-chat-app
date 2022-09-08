@@ -22,6 +22,7 @@ module.exports = {
         id: user._id,
         name: user.name,
         image: user.image,
+        email: user.email,
       };
 
       const KEY = process.env.KEY;
@@ -43,6 +44,7 @@ module.exports = {
         id: user._id,
         name: user.name,
         image: user.image,
+        email: user.email,
       };
       const KEY = process.env.KEY;
       const token = await jwt.sign(data, KEY, { expiresIn: "1d" });
@@ -64,9 +66,11 @@ module.exports = {
 
     console.log(req.user._id.toString());
 
-    const users = await User.find(keyword).find({
-      _id: { $ne: req.user._id.toString() },
-    });
+    const users = await User.find(keyword)
+      .find({
+        _id: { $ne: req.user._id.toString() },
+      })
+      .select("-password");
     return res.status(200).json({ users });
   },
 };

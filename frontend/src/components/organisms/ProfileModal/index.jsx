@@ -1,14 +1,13 @@
 import {
-  Button,
   IconButton,
   Image,
   Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import React from "react";
@@ -32,23 +31,27 @@ export default function ProfileModal({ user, children }) {
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{user.name}</ModalHeader>
+          <ModalHeader display={"flex"} justifyContent={"center"}>
+            {user.name}
+          </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody
+            display={"flex"}
+            flexDirection={"column"}
+            alignItems={"center"}
+            justifyContent={"center"}
+          >
             <Image
               boxSize={"150px"}
               borderRadius={"full"}
               src={user.image}
               alt={user.name}
             />
-          </ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-            <Button variant="ghost">Secondary Action</Button>
-          </ModalFooter>
+            <Text marginTop={"10px"} fontSize="20px">
+              {user.email}
+            </Text>
+          </ModalBody>
         </ModalContent>
       </Modal>
     </>

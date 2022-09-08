@@ -37,7 +37,9 @@ export default function Home() {
         borderWidth={"1px"}
       >
         <Center>
-          <Text fontSize={"2xl"}>Chat App</Text>
+          <Text fontSize={"2xl"} fontWeight={"bold"} color="orangered">
+            OkaTalk
+          </Text>
         </Center>
       </Box>
       <Box

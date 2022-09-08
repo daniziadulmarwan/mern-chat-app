@@ -7,6 +7,6 @@ const Router = require("express").Router();
 
 Router.post("/signup", signup, userController.signup);
 Router.post("/signin", signin, userController.signin);
-Router.route("/").get(auth, userController.fetchAll);
+Router.get("/", auth, userController.fetchAll);
 
 module.exports = Router;
