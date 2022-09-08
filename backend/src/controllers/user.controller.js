@@ -21,6 +21,7 @@ module.exports = {
       const data = {
         id: user._id,
         name: user.name,
+        image: user.image,
       };
 
       const KEY = process.env.KEY;
@@ -41,6 +42,7 @@ module.exports = {
       const data = {
         id: user._id,
         name: user.name,
+        image: user.image,
       };
       const KEY = process.env.KEY;
       const token = await jwt.sign(data, KEY, { expiresIn: "1d" });

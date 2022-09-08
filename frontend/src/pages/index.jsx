@@ -9,11 +9,21 @@ import {
   TabPanels,
   TabPanel,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Signin from "../components/organisms/Signin";
 import SignUp from "../components/organisms/Signup";
 
 export default function Home() {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/");
+    }
+  }, []);
+
   return (
     <Container maxW={"xl"} centerContent>
       <Box
