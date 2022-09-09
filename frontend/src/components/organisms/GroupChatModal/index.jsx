@@ -144,6 +144,7 @@ export default function GroupChatModal({ children }) {
                 placeholder="Add users"
                 mb={1}
                 onChange={(e) => onSearch(e.target.value)}
+                autoComplete={"off"}
               />
             </FormControl>
 

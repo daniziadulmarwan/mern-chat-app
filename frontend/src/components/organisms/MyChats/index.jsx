@@ -7,7 +7,7 @@ import { ChatState } from "../../../context/ChatProvider";
 import ChatLoading from "../ChatLoading";
 import GroupChatModal from "../GroupChatModal";
 
-export default function MyChats() {
+export default function MyChats({ fetchAgain }) {
   const URL = "http://localhost:5000/api";
   const [loggedUser, setLoggedUser] = useState();
   const { user, selectedChat, setSelectedChat, chats, setChats } = ChatState();
@@ -36,7 +36,7 @@ export default function MyChats() {
   useEffect(() => {
     setLoggedUser(login);
     fetchChat();
-  }, []);
+  }, [fetchAgain]);
 
   const getSender = (loggedUser, users) => {
     return users[0].id === loggedUser.id ? users[1].name : users[0].name;
