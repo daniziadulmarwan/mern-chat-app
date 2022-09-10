@@ -9,6 +9,7 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
+  Avatar,
 } from "@chakra-ui/react";
 import React from "react";
 import { ViewIcon } from "@chakra-ui/icons";
@@ -41,7 +42,7 @@ export default function ProfileModal({ user, children }) {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Image
+            <Avatar
               boxSize={"150px"}
               borderRadius={"full"}
               src={user.image}
