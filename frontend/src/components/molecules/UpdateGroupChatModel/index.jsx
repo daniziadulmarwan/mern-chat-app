@@ -23,7 +23,11 @@ import axios from "axios";
 import UserList from "../UserList";
 import jwtDecode from "jwt-decode";
 
-export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
+export default function UpdateGroupChatModel({
+  fetchAgain,
+  setFetchAgain,
+  fetchMessages,
+}) {
   const URL = "http://localhost:5000/api";
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, selectedChat, setSelectedChat } = ChatState();
@@ -154,6 +158,7 @@ export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
       });
       userChoosed._id === login.id ? setSelectedChat() : setSelectedChat(data);
       setFetchAgain(!fetchAgain);
+      fetchMessages();
       setLoading(false);
     } catch (error) {
       toast({
