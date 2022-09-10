@@ -14,16 +14,20 @@ import {
   Box,
   FormControl,
   Input,
+  Spinner,
 } from "@chakra-ui/react";
 import { ViewIcon } from "@chakra-ui/icons";
 import { ChatState } from "../../../context/ChatProvider";
 import UserBadge from "../UserBadge";
 import axios from "axios";
+import UserList from "../UserList";
+import jwtDecode from "jwt-decode";
 
 export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
   const URL = "http://localhost:5000/api";
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { user, selectedChat, setSelectedChat } = ChatState();
+  const login = jwtDecode(user);
 
   const [groupChatName, setGroupChatName] = useState("");
   const [search, setSearch] = useState("");
@@ -59,9 +63,111 @@ export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
     setGroupChatName("");
   };
 
-  const handleRemove = () => {};
+  const handleSearch = async (keyword) => {
+    setSearch(keyword);
+    if (!keyword) {
+      return;
+    }
+    try {
+      setLoading(true);
+      axios.defaults.headers.common = { Authorization: `Bearer ${user}` };
+      const { data } = await axios.get(`${URL}/user?search=${search}`);
+      setLoading(false);
+      setSearchResult(data.users);
+    } catch (error) {
+      toast({
+        title: "Error occured",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
 
-  const handleSearch = () => {};
+  const handleAddUser = async (addUser) => {
+    if (selectedChat.users.find((u) => u._id === addUser._id)) {
+      toast({
+        title: "User already added",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    if (selectedChat.groupAdmin._id !== login.id) {
+      toast({
+        title: "Only admin can add member",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      axios.defaults.headers.common = { Authorization: `Bearer ${user}` };
+      const { data } = await axios.put(`${URL}/chat/addgroup`, {
+        chatId: selectedChat._id,
+        userId: addUser._id,
+      });
+      setSelectedChat(data);
+      setFetchAgain(!fetchAgain);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error occured",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
+
+  const handleRemove = async (userChoosed) => {
+    if (
+      selectedChat.groupAdmin._id !== login.id &&
+      userChoosed._id !== login.id
+    ) {
+      toast({
+        title: "Only admin can remove member",
+        status: "warning",
+        duration: 3000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+
+    try {
+      setLoading(true);
+      axios.defaults.headers.common = { Authorization: `Bearer ${user}` };
+      const { data } = await axios.put(`${URL}/chat/removegroup`, {
+        chatId: selectedChat._id,
+        userId: userChoosed._id,
+      });
+      userChoosed._id === login.id ? setSelectedChat() : setSelectedChat(data);
+      setFetchAgain(!fetchAgain);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error occured",
+        status: "warning",
+        duration: 4000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
+  };
+
+  console.log(selectedChat.users);
 
   return (
     <>
@@ -121,6 +227,18 @@ export default function UpdateGroupChatModel({ fetchAgain, setFetchAgain }) {
                 autoComplete={"off"}
               />
             </FormControl>
+
+            {loading ? (
+              <Spinner size={"lg"} />
+            ) : (
+              searchResult?.map((item) => (
+                <UserList
+                  key={item._id}
+                  user={item}
+                  handleFunction={() => handleAddUser(item)}
+                />
+              ))
+            )}
           </ModalBody>
           <ModalFooter>
             <Button
