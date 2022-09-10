@@ -64,8 +64,6 @@ module.exports = {
         }
       : {};
 
-    console.log(req.user._id.toString());
-
     const users = await User.find(keyword)
       .find({
         _id: { $ne: req.user._id.toString() },

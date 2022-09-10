@@ -7,6 +7,7 @@ const connection = require("./database");
 
 const chatRouter = require("./routers/chat.router");
 const userRouter = require("./routers/user.router");
+const messageRouter = require("./routers/message.router");
 
 const app = express();
 connection();
@@ -19,6 +20,7 @@ app.use(morgan("tiny"));
 
 app.use("/api/user", userRouter);
 app.use("/api/chat", chatRouter);
+app.use("/api/message", messageRouter);
 
 const port = process.env.PORT || 5000;
 app.listen(port, () =>
