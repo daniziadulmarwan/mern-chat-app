@@ -16,17 +16,47 @@ import ScrollableChat from "../../atoms/ScrollableChat";
 import ProfileModal from "../../organisms/ProfileModal";
 import UpdateGroupChatModel from "../UpdateGroupChatModel";
 import "./messages.css";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:5000";
+let socket, selectedChatCompare;
 
 export default function SingleChat({ fetchAgain, setFetchAgain }) {
   const URL = "http://localhost:5000/api";
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
+  const [socketConnected, setSocketConnected] = useState(false);
 
   const toast = useToast();
 
   const { user, selectedChat, setSelectedChat } = ChatState();
   const login = jwtDecode(user);
+
+  useEffect(() => {
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket = io(ENDPOINT);
+    socket.emit("setup", login);
+    socket.on("connection", () => setSocketConnected(true));
+  }, []);
+
+  useEffect(() => {
+    socket.on("message received", (newMessageReceived) => {
+      // console.log(newMessageReceived);
+      if (
+        !selectedChatCompare ||
+        selectedChatCompare._id !== newMessageReceived.chat._id
+      ) {
+        // give notification
+      } else {
+        setMessages([...messages, newMessageReceived]);
+      }
+    });
+  }, []);
 
   const getSender = (loggedUser, users) => {
     return users[0].id === loggedUser.id ? users[1].name : users[0].name;
@@ -45,6 +75,7 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
           content: newMessage,
           chatId: selectedChat._id,
         });
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
@@ -69,9 +100,10 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
       setLoading(true);
       axios.defaults.headers.common = { Authorization: `Bearer ${user}` };
       const { data } = await axios.get(`${URL}/message/${selectedChat._id}`);
-      console.log(messages);
       setMessages(data);
       setLoading(false);
+
+      socket.emit("join chat", selectedChat._id);
     } catch (error) {
       toast({
         title: `${error.message}`,
@@ -82,10 +114,6 @@ export default function SingleChat({ fetchAgain, setFetchAgain }) {
       });
     }
   }
-
-  useEffect(() => {
-    fetchMessages();
-  }, [selectedChat]);
 
   return (
     <>
