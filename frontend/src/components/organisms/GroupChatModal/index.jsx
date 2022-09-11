@@ -40,11 +40,9 @@ export default function GroupChatModal({ children }) {
       setLoading(true);
       axios.defaults.headers.common = { Authorization: `Bearer ${user}` };
       const { data } = await axios.get(`${URL}/user?search=${search}`);
-      console.log(data.users);
       setLoading(false);
       setSearchResult(data.users);
     } catch (error) {
-      console.log(error.message);
       toast({
         title: "Error occured",
         status: "warning",

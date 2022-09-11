@@ -172,8 +172,6 @@ export default function UpdateGroupChatModel({
     }
   };
 
-  console.log(selectedChat.users);
-
   return (
     <>
       <IconButton

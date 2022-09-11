@@ -63,7 +63,6 @@ export default function SignUp() {
         })
         .catch((err) => {
           setLoading(false);
-          console.log(err);
         });
     }
   };
