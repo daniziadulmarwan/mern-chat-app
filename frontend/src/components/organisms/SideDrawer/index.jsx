@@ -175,6 +175,7 @@ export default function SideDrawer() {
               />
             </MenuButton>
             <MenuList>
+              {/* profile modal */}
               <ProfileModal user={login}>
                 <MenuItem>My Profile</MenuItem>
               </ProfileModal>

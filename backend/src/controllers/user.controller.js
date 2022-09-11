@@ -18,17 +18,17 @@ module.exports = {
         image,
       });
 
-      const data = {
-        id: user._id,
-        name: user.name,
-        image: user.image,
-        email: user.email,
-      };
+      // const data = {
+      //   id: user._id,
+      //   name: user.name,
+      //   image: user.image,
+      //   email: user.email,
+      // };
 
-      const KEY = process.env.KEY;
-      const token = await jwt.sign(data, KEY, { expiresIn: "1d" });
+      // const KEY = process.env.KEY;
+      // const token = await jwt.sign(data, KEY, { expiresIn: "1d" });
 
-      return res.status(201).json({ token });
+      return res.status(201).json({ user });
     } catch (error) {
       return res.status(400).json(error.message);
     }

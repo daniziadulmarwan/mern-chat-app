@@ -109,7 +109,8 @@ export default function MyChats({ fetchAgain }) {
             })}
           </Stack>
         ) : (
-          <ChatLoading />
+          // <ChatLoading />
+          <></>
         )}
       </Box>
     </Box>

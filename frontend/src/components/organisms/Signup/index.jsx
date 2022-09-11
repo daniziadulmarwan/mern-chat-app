@@ -84,7 +84,7 @@ export default function SignUp() {
 
       localStorage.setItem("token", JSON.stringify(res.data.token));
       setLoading(false);
-      navigate("/chats");
+      navigate("/");
     } catch (error) {
       toast({
         title: error.message,
