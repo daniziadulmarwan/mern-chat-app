@@ -7,6 +7,8 @@ async function auth(req, res, next) {
   if (!token) return res.sendStatus(403);
 
   const decode = await jwt.verify(token, process.env.KEY);
+  if (!decode) return res.status(400).json("Your token was expired");
+
   const user = await User.findById(decode.id).select("-password");
   if (!user) return res.sendStatus(403);
 
